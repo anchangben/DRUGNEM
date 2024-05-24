@@ -105,8 +105,8 @@ With respect to the baseline treatment (C), we estimate the probability of a pro
 expressed under each drug using linear models for all cell types. We next build an integrated drug-nested
 network using nested effects models from a drug desired effects matrix using the weighttype parameter
 defining the type of desired phenotype information to use for optimizing treatment effects. Values include:
-(i) 'T-stat': Regulation using T-stat of intracellular signaling e ects (ii) 'FC'(default): Regulation based
-on Foldchange of intracellular signaling e ects, and (iii) 'deathmarker': effects associated with regulation
+(i) 'T-stat': Regulation using T-stat of intracellular signaling effects (ii) 'FC'(default): Regulation based
+on Foldchange of intracellular signaling effects, and (iii) 'deathmarker': effects associated with regulation
 of a death effector protein or any other desired marker. (See main text for description). Finally, we score
 and rank all drug combinations using posterior weights of the target positions on the derived drug-target
 network with the best regimens on the top. Drug combinations are scored both under the independence
