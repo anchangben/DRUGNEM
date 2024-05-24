@@ -51,7 +51,7 @@ drugnem relies on R (>= 3.4.0) and other R libraries:
 FlowCore, party,nem, RColorBrewer, limma, RBGL,graph,Rgraphviz,statmod,
 MASS, PerformanceAnalytics, fastcluster, cluster, ggplot2, car,stats4, mvtnorm, grid, modeltools, plottrix,
 xts, sandwich, and zoo. Note nem is no more maintained in Bioconductor. You will need to manually install it from the included source file. 
-The current drygnem implementation runs on Mac OS X 10.7 and above operating sys-
+The included drugnem implementation runs on windows and Mac OS X 10.7 and above operating sys-
 tems. R can be installed in these systems by simply downloading the most recent R-x.y.z.tar.gz  file from
 http://www.r-project.org and following the system speci c instructions.To install the package using the
 devtools package in R simply open an R console or click the Rstudio drugnem. Rproj object in the package
