@@ -60,18 +60,28 @@ folder which automatically opens the drugnem libraries in a new stand alone Rstu
 # Installing and Loading the Library using R studio
 
 We start by installing the drugnem library.
+
 >library("devtools")
+
 >library(roxygen2)
+
 >setwd("path/to/drugnem folder")
+
 install("drugnem")
+
 We start by loading the drugnem library. Next we create a working directory (drugnem output path) to
 save all drugnem output  gures and data.
+
 >library(drugnem)
+
 >dir.create(path/to/drugnem output)
+
 A complete installation of drugnem requires that all dependencies are loaded.
 
 # Installing and Loading the Library using tar or zip file
+
 install.packages("path/to/drugnem tar or zip file", repos = NULL, type = "source")
+
 > library(drugnem)
 
 # Running drugnem
