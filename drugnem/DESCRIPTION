@@ -1,0 +1,10 @@
+Package: drugnem
+Title: DRUG-NEM : Individualized Drug combination Strategy for intratumor Heterogeneity using single-cell data
+Version: 0.1
+Author: Benedict Anchang [aut, cre]
+Maintainer: Benedict Anchang <anb28636@gmail.com>
+Description: Drugnem takes as input  drug response single-cell data from mass cytometry derived from a single or several patient samples and returns both the nested drug-target interaction network and the ranking of all possible drug combinations and their scores.
+Depends: R (>= 3.2.2),flowCore, party,nem, RColorBrewer, limma, RBGL, MASS, PerformanceAnalytics, fastcluster, cluster, ggplot2, car, Rgraphviz, plotrix 
+License: Mainly for academic purposes
+LazyData: true
+RoxygenNote: 6.0.1
