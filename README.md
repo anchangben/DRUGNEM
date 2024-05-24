@@ -16,10 +16,10 @@ combination therapy that accounts for intratumor heterogeneity.
 We introduce a model framework called DRUG-Nested Effects Models (DRUG-NEM) for analyzing
 heterogeneous drug response data across a population of single cells to optimize and prioritize(rank)
 combination therapy particularly for single drugs and in general any perturbation response data. This
-algorithm combines (1) Population identi cation, (2) Estimating of desired e ects (3) Nested e ects
+algorithm combines (1) Population identification, (2) Estimating of desired effects (3) Nested effects
 modeling and (4) Score-Rank analysis to identify and rank multi-target drug combinations from single
 drug effects measured at the level of single cells. The main function drugnemmain takes as input either
-(1) a folder containing all drug response FCS  les or (2) A data matrix of pooled drug responses for
+(1) a folder containing all drug response FCS  files or (2) A data matrix of pooled drug responses for
 all proteins(columns) across all cells(rows) or (3) a folder with manually gated cells for drug responses
 from mass cytometry comprising of n drugs and m target (marker) responses on t cells taken from single
 or several patient samples and returns several pdf  files including both the drug target nested network
