@@ -8,8 +8,8 @@ can be exposed to drug(s) and the response measured using high-throughput single
 CyTOF. Some of the markers denoted here as lineage biomarkers can be used to characterize cell types
 eg. T or B cells including malignant cell types and the others used to de ne the functional states of a cell
 eg. apoptotic or intracellular signaling states producing a complex viewpoint of intratumor heterogeneity.
-Intratumor heterogeneity poses an important challenge to cancer therapy [1]. Drug resistance mechanisms
-from targeted single drugs have been identified due to intratumor heterogeneity [2], motivating the need for
+Intratumor heterogeneity poses an important challenge to cancer therapy. Drug resistance mechanisms
+from targeted single drugs have been identified due to intratumor heterogeneity, motivating the need for
 combination therapy. The increasing number of potential FDA approved targeted drugs and corresponding
 resistance mechanisms identified due to intratumor heterogeneity warrants a systematic and optimal
 combination therapy that accounts for intratumor heterogeneity.
