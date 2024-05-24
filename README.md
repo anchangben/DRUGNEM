@@ -37,3 +37,39 @@ pdf(Tiff)  files corresponding to various diagnostic plots including plots of 
 CCAST decision trees for all cell lineage sub groups, Heatmaps of fold changes for all functional or
 intracellular markers across all sub populations and DRUG-NEM network and ranking list of all drug
 combinations with corresponding score.
+
+# Introduction
+drugnem uses data derived from mass cytometry (MCM) (CyTOF), which is a recently developed high
+throughput MCM technology for labeling single cells with metal-chelated antibodies that greatly reduce the
+auto fluorescence effect of individual protein signals, thereby circumventing the need for robust compensation
+after data generation. MCM has been adapted to generate high throughput drug screening single-cell
+signaling data using mass-tag cellular barcoding (MCB). This provides the input data for drugnem
+although other molecular datasets with a similar input data structure can be adapted as well.
+
+# Installation
+drugnem relies on R (>= 3.4.0) and other R libraries: 
+FlowCore, party,nem, RColorBrewer, limma, RBGL,graph,Rgraphviz,statmod,
+MASS, PerformanceAnalytics, fastcluster, cluster, ggplot2, car,stats4, mvtnorm, grid, modeltools, plottrix,
+xts, sandwich, and zoo. Note nem is no more maintained in Bioconductor. You will need to manually install it from the included source file. 
+The current drygnem implementation runs on Mac OS X 10.7 and above operating sys-
+tems. R can be installed in these systems by simply downloading the most recent R-x.y.z.tar.gz  file from
+http://www.r-project.org and following the system speci c instructions.To install the package using the
+devtools package in R simply open an R console or click the Rstudio drugnem. Rproj object in the package
+folder which automatically opens the drugnem libraries in a new stand alone Rstudio window.
+
+# Installing and Loading the Library using R studio
+
+We start by installing the drugnem library.
+>library("devtools")
+>library(roxygen2)
+>setwd("path/to/drugnem folder")
+install("drugnem")
+We start by loading the drugnem library. Next we create a working directory (drugnem output path) to
+save all drugnem output  gures and data.
+>library(drugnem)
+>dir.create(path/to/drugnem output)
+A complete installation of drugnem requires that all dependencies are loaded.
+
+# Installing and Loading the Library using tar or zip file
+install.packages("path/to/drugnem tar or zip file", repos = NULL, type = "source")
+> library(drugnem)
