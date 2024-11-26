@@ -41,9 +41,9 @@ function (x, what = "graph", remove.singletons = FALSE, PDF = FALSE,
             gR = SCCgraph(gR)$graph
             M = as(gR, "matrix")
         }
-        if (numEdges(gR) == 0) 
-            edgeattr = list()
-        else {
+        if (numEdges(gR) == 0) {
+          edgeattr = list()
+        } else {
             if (transitiveReduction) 
                 M = transitive.reduction(M)
             eDDn <- names(edgeDataDefaults(gR))
@@ -198,7 +198,7 @@ plotEffects2<-
 function (D, nem, border = TRUE, legend = TRUE, order = NULL, 
     orderSCC = TRUE, palette = "BlueRed", ...) 
 {
-    if (!(class(D) %in% c("matrix", "data.frame"))) 
+    if (sum(class(D) %in% c("matrix", "data.frame")) == 0) 
         stop("First argument has to be the data matrix and second the nem object!")
     sccg <- SCCgraph(nem$graph, name = TRUE)
     if (numEdges(sccg$graph)==0)  {
@@ -326,7 +326,7 @@ plotEffects3<-
 function (D, nem, border = TRUE, legend = TRUE, order = NULL, 
     orderSCC = TRUE, palette = "BlueRed", ...) 
 {
-    if (!(class(D) %in% c("matrix", "data.frame"))) 
+    if (sum(class(D) %in% c("matrix", "data.frame")) == 0) 
         stop("First argument has to be the data matrix and second the nem object!")
     sccg <- SCCgraph(nem$graph, name = TRUE)
     if (numEdges(sccg$graph)==0)  {
@@ -471,7 +471,9 @@ function (D, G, x, SCC, main = NULL, zlim = NULL, draw.lines = FALSE,
     erase.screen(2)
     screen(2)
     mynodes = AgNode(G)
-    nodenames = sapply(mynodes, name)
+    
+    nodenames = sapply(mynodes, function(i) i@name)
+    
     xy = getNodeXY(G)
     left = xy$x <= max(xy$x) * 0.5
     right = xy$x > max(xy$x) * 0.5

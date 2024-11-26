@@ -119,10 +119,11 @@ fitnemupdownnoeffecttstat<-function(Out3,Outp,drugs,p=NULL,patient,infer,type="C
             Deffect3[[t]]=Deffect[[t]][[2]][,did,drop=FALSE]
             Esize[t,]=Deffect3[[t]]
             dat2=fcp19[-deathid,]
-            hdat=make.R.matrix1(dat2, wt=drugs[1], pi1 = 0.01)[[1]]
-            hdat1=make.R.matrix1(dat2, wt=drugs[1], pi1 = 0.01)[[2]]
+            hdat=make.R.matrix1(dat2, wt=drugs[1], pi1 = 0.01)[[1]] # log-odds
+            hdat1=make.R.matrix1(dat2, wt=drugs[1], pi1 = 0.01)[[2]] # t-stats
             
             ###hdat2=ifelse(Outp[-deathid,-1,t]<0,hdat,rnorm(1,-10,0.05))
+            # see DRUG-NEM Supplement Section 4
             hdat2=hdat1
             hdat2b=-1*hdat1
             hdat2c=-hdat

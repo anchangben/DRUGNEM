@@ -24,61 +24,70 @@
 
 ##### Comparison of intracellular signaling across survival populations ########
 comparepopintrasignalalive<-function(rowids,dataP,asinhp,drugs,sigids,colid,antibody,patient) {
-    
+  
     nrcolors = 100
     half = 1 + nrcolors/2
     colpal = c(brewer.pal(9, "Blues")[9:1], brewer.pal(9,"OrRd")[1:9])
     colorpalette = colorRampPalette(colpal)(nrcolors)
-    Tot=length(unlist(rowids))
-    sids=dataP[,dim(dataP)[2]][unlist(rowids)]
-    tt=table(sids)
-    total=NULL
-    for (ii in 1:length(tt)) total[ii]=tt[ii]
-    if(is.null(asinhp)){ U=dataP[,colid]
-    }else{
-      U=asinh(dataP[,colid]/asinhp)
+  
+    # get number of cells in each drug treatment
+    Tot = length(unlist(rowids))
+    sids = dataP[, dim(dataP)[2]][unlist(rowids)]
+    tt = table(sids)
+    total = NULL
+    total = as.vector(tt)
+  
+    # extract lineage marker expressions and arcsin transform if necessary
+    if(is.null(asinhp)){ 
+      U = dataP[, colid]
+    } else {
+      U = asinh(dataP[,colid]/asinhp)
     }
-    
-    minu=min(U,na.rm=TRUE)
-    maxu=max(U,na.rm=TRUE)
-    minx=max(abs(minu),abs(maxu))
+    minu = min(U, na.rm=TRUE)
+    maxu = max(U, na.rm=TRUE)
+    minx = max(abs(minu), abs(maxu))
     #key_color1=seq(-1*minx,minx,length.out=length(colid))
-    key_color1=seq(minu,maxu,length.out=length(colid))
-    
+    key_color1=seq(minu, maxu, length.out=length(colid))
+  
+    # extract signaling marker expressions and arcsin transform if necessary
     if(is.null(asinhp)){
-        Z=dataP[,sigids]
+      Z = dataP[, sigids]
     }else{
-      Z=asinh(dataP[,sigids]/asinhp)
+      Z = asinh(dataP[,sigids]/asinhp)
     }
-    
     minz=min(Z,na.rm=TRUE)
     maxz=max(Z,na.rm=TRUE)
     miny=max(abs(minz),abs(maxz))
     #key_color2=seq(-1*miny,miny,length.out=length(sigids))
     key_color2=seq(minz,maxz,length.out=length(sigids))
     
-    Sdata=list()
-    Sdata2=list()
+    Sdata = list()
+    Sdata2 = list()
     cellstate <- paste("Pop",1:length(rowids))
-    pProteins=antibody[sigids]
-    dimn=list(pProteins,drugs,cellstate)
-    Out=array(NA,c(length(pProteins),length(drugs),length(cellstate)),dimnames=dimn)
-    psize1=list()
+    pProteins = antibody[sigids]
+    dimn = list(pProteins, drugs, cellstate)
+    # generate a 3-dimensional array: protein x drug x sub-population
+    Out = array(NA, c(length(pProteins), length(drugs), length(cellstate)), dimnames=dimn)
+    psize1 = list()
     
-    for( j in 1:length(rowids)) {
+    #### Plot cell-level sub-population marker expression profiles per condition ####
+    # Also: calculate mean marker expression in sub-pop j under treatment k
+    #       calculate proportion of sub-pop j cells in treatment k
+    
+    for(j in 1:length(cellstate)) {
+      
+        rowids0 = dataP[,dim(dataP)[2]][rowids[[j]]]
+        pdf(file=paste(patient,"Heatmaps for matching Treatments in Pop",j,".pdf",sep=""), width=12, height=12)
         
-        rowids0=dataP[,dim(dataP)[2]][rowids[[j]]]
-        pdf(file=paste(patient,"Heatmaps for matching Treatments in Pop",j,".pdf",sep=""),width=12, height=12)
-        
-        Sdata[[j]]=list()
-        pdc=NULL
-        psize1[[j]]=list()
-        for ( k in (as.numeric(names(table(rowids0))))) {
-            rw1=which(rowids0==k)
-            rowids1=rowids[[j]][rw1]
+        Sdata[[j]] = list()
+        pdc = NULL
+        psize1[[j]] = list()
+        for (k in (as.numeric(names(table(rowids0))))) {
+            rw1 = which(rowids0==k)
+            rowids1 = rowids[[j]][rw1]
             
-            BB1=as.matrix(rbind(U[rowids1,],key_color1))
-            BB3=as.matrix(rbind(Z[rowids1,],key_color2))
+            BB1=as.matrix(rbind(U[rowids1,], key_color1))
+            BB3=as.matrix(rbind(Z[rowids1,], key_color2))
             
             rownames(BB1)=paste(c(rowids1,"key"))
             colnames(BB1)=antibody[colid]
@@ -111,66 +120,70 @@ comparepopintrasignalalive<-function(rowids,dataP,asinhp,drugs,sigids,colid,anti
         
         dev.off();
     }
+    save(Sdata, file=paste("Sdata.rdata")) # cell by protein expression for each sub-pop
+    save(Out,file="Out.rdata")             # protein x drug x sub-population; mean expression
+    save(Sdata2, file="Sdata2.rdata")      # protein by cell expression for each sub-pop
+    save(psize1, file="psize1.rdata")      # cell proportion in each sub-pop by drug treatment
     
-   
-    
-    save(Sdata, file=paste("Sdata.rdata"))
-    save(Out,file="Out.rdata")
-    save(Sdata2, file="Sdata2.rdata")
-    save(psize1, file="psize1.rdata")
     #### Plot subpopulation FC mean expression profiles ####
-    pdf(file=paste(patient,"Heatmap of Mean FC Protein Expressions across cell states",ii,".pdf",sep=""),width=15, height=15)
     
+    pdf(file=paste(patient,"Heatmap of Mean FC Protein Expressions across cell states.pdf",sep=""),width=15, height=15)
     for (t in 1:length(cellstate)) {
-        if(sum(is.na(Out[,1,t]))>0) {
-            BB=NULL
-        } else {
-            
-            BB=Out[,,t]-Out[,1,t]
-            minzz=min(BB,na.rm=TRUE)
-            maxzz=max(BB,na.rm=TRUE)
-            minyy=max(abs(minzz),abs(maxzz))
-            key_color=seq(-1*minyy,minyy,length.out=dim(BB)[2])
-            BB=as.matrix(rbind(BB,key_color))
-            par(mar=c(3,3,3,8))
-            image(x=1:dim(BB)[2],y=1:dim(BB)[1],z=as.matrix(t(BB)),col = colorpalette,xlab = "Drugs",xaxt="n",yaxt="n",ylab = "Proteins",family="sans",cex.lab=1.4,main=paste(cellstate[t],"Protein Expressions"))
-            mtext(rownames(BB),at=c(1:dim(BB)[1]),side=4,las=2,line=1, family= "sans", cex=1.5)
-            mtext(colnames(BB),at=c(1:dim(BB)[2]),side=1,las=1,line=1, family= "sans", cex=1.5)
-        }
+      if(sum(is.na(Out[,1,t]))>0) {
+        BB=NULL
+      } else {
+        BB=Out[,,t]-Out[,1,t]              # treatment mean - basal mean
+        minzz=min(BB,na.rm=TRUE)
+        maxzz=max(BB,na.rm=TRUE)
+        minyy=max(abs(minzz),abs(maxzz))
+        key_color=seq(-1*minyy,minyy,length.out=dim(BB)[2])
+        BB=as.matrix(rbind(BB,key_color))
+        par(mar=c(3,3,3,8))
+        image(x=1:dim(BB)[2], y=1:dim(BB)[1], z=as.matrix(t(BB)),
+              col = colorpalette,xlab = "Drugs",xaxt="n",yaxt="n",
+              ylab = "Proteins",family="sans",cex.lab=1.4,
+              main=paste(cellstate[t],"Protein Expressions"))
+        mtext(rownames(BB),at=c(1:dim(BB)[1]),side=4,las=2,line=1, family= "sans", cex=1.5)
+        mtext(colnames(BB),at=c(1:dim(BB)[2]),side=1,las=1,line=1, family= "sans", cex=1.5)
+      }
     }
-    dev.off();
+    dev.off()
     
-    ##### Global normalization ################
+    ##### Global normalization #####
+    
     #pdf(file=paste(patient,"Heatmap of Global Mean FC Protein Expressions across cell states.pdf",sep=""),width=15, height=15)
-   Out2=Out
+    Out2 = Out
     for (t in 1:length(cellstate)) {
-        if(sum(is.na(Out2[,,t]))>0) {
-            Out2[,,t]= NA
-        } else {
-            Out2[,,t]=Out2[,,t]-Out2[,1,t]
-        }
+      if(sum(is.na(Out2[,,t]))>0) {
+        Out2[,,t]= NA
+      } else {
+        Out2[,,t]=Out2[,,t]-Out2[,1,t]  # treatment mean - basal mean
+      }
     }
-    mino=min(Out2,na.rm=TRUE)
-    maxo=max(Out2,na.rm=TRUE)
-    minoo=max(abs(mino),abs(maxo))
-    key_color1=seq(-1*minoo,minoo,length.out=dim(Out2)[2])
+    save(Out2,file="Out2.rdata")        # FC matrices
+    
+    # mino=min(Out2,na.rm=TRUE)
+    # maxo=max(Out2,na.rm=TRUE)
+    # minoo=max(abs(mino),abs(maxo))
+    # key_color1=seq(-1*minoo,minoo,length.out=dim(Out2)[2])
     
     ##key_color1=seq(mino,maxo,length.out=dim(Out2)[2])
-  #  for (t in 1:length(cellstate)) {
-   #     BB=Out[,,t]-Out[,1,t]
-   #     BB=as.matrix(rbind(BB,key_color1))
-   #     par(mar=c(3,3,3,8))
+    #  for (t in 1:length(cellstate)) {
+    #     BB=Out[,,t]-Out[,1,t]
+    #     BB=as.matrix(rbind(BB,key_color1))
+    #     par(mar=c(3,3,3,8))
     #    image(x=1:dim(BB)[2],y=1:dim(BB)[1],z=as.matrix(t(BB)),col = colorpalette,xlab = "Drugs",xaxt="n",yaxt="n",ylab = #"Proteins",family="sans",cex.lab=1.4,main=paste(cellstate[t],"Protein Expressions"))
-   #     mtext(rownames(BB),at=c(1:dim(BB)[1]),side=4,las=2,line=1, family= "sans", cex=1.5)
-   #     mtext(colnames(BB),at=c(1:dim(BB)[2]),side=1,las=1,line=1, family= "sans", cex=1.5)
-   # }
+    #     mtext(rownames(BB),at=c(1:dim(BB)[1]),side=4,las=2,line=1, family= "sans", cex=1.5)
+    #     mtext(colnames(BB),at=c(1:dim(BB)[2]),side=1,las=1,line=1, family= "sans", cex=1.5)
+    # }
     #dev.off();
-    save(Out2,file="Out2.rdata")
-    ##### RUN MNEM ###########
+    
+    #save(Out2,file="Out2.rdata")
+    
+    ##### RUN MNEM #####
     ##detach("package:party", unload=TRUE)
     ###fitmnemdown(Out3=Sdata2,Outp=Out2,drugs,p=NULL,patient=patient,infer=infer,type="CONTmLL")
     
     return(list(singlecelldata=Sdata,Popmeanexprsdata=Out,Diffpopmeanexprsdata=Out2))
-    
+  
 }
-
